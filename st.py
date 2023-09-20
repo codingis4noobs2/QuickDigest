@@ -3,7 +3,7 @@ import streamlit as st
 import assemblyai as aai
 
 CACHE_DIR = "./uploads"
-aai.settings.api_key = "17a805a142304052b92250d0fb149621"
+aai.settings.api_key = st.secrets['assembly_api_key']
 
 def render_message(message):
     with st.chat_message(message["role"]):
