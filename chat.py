@@ -62,7 +62,7 @@ if user_query := st.chat_input():
     st_utils.render_message(message)
 
     with st.chat_message("assistant"):
-        stream = query_engine.chat(user_query)
+        stream = query_engine.stream_chat(user_query)
         text = llamaindex.handle_stream(st.empty(), stream)
         message = {"role": "assistant", "text": text}
         messages.append(message)
