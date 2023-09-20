@@ -20,7 +20,7 @@ service_context = ServiceContext.from_defaults(llm=llm, embed_model=embed_model)
 set_global_service_context(service_context)
 
 # Upload PDFs, DOCs, TXTs, MP3s, and MP4s
-documents = st_utils.upload_files(types=["pdf", "txt", "mp3", "mp4", 'mpeg'], accept_multiple_files=True)
+documents = st_utils.upload_files(types=["txt", "mp3", "mp4", 'mpeg'], accept_multiple_files=True)
 
 # Transcribe audio/video files and save the transcription as a .txt file
 def transcribe_and_save(file_path):
@@ -51,7 +51,7 @@ query_engine = index.as_chat_engine(chat_mode="condense_question", streaming=Tru
 messages = st.session_state.get("messages", [])
 
 if not messages:
-    messages.append({"role": "assistant", "text": "Hi!"})
+    messages.append({"role": "assistant", "text": "Hi, How can I assist you today?"})
 
 for message in messages:
     st_utils.render_message(message)
