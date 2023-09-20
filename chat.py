@@ -1,23 +1,45 @@
 import streamlit as st
-from llama_index import OpenAIEmbedding, ServiceContext, set_global_service_context
+from llama_index import (
+    OpenAIEmbedding,
+    ServiceContext,
+    set_global_service_context,
+)
 from llama_index.llms import OpenAI
-import llamaindex
-import st as st_utils
+import llamaindex  # Updated import
+import st as st_utils  # Updated import to avoid naming conflict
+import assemblyai as aai
 
-st.title("QuickDigest")
+st.title("QuickDigest AI - Powered by OpenAI, AssemblyAI & Llama Index")
 
 openai_api_key = st_utils.get_key()
 
+# Define service-context
 llm = OpenAI(temperature=0.1, model="gpt-3.5-turbo", api_key=openai_api_key)
 embed_model = OpenAIEmbedding(api_key=openai_api_key)
 service_context = ServiceContext.from_defaults(llm=llm, embed_model=embed_model)
 set_global_service_context(service_context)
 
-# Upload PDFs, DOCs, and TXTs
-documents = st_utils.upload_files(types=["pdf", "txt"], accept_multiple_files=True)
+# Upload PDFs, DOCs, TXTs, MP3s, and MP4s
+documents = st_utils.upload_files(types=["pdf", "txt", "mp3", "mp4", 'mpeg'], accept_multiple_files=True)
+
+# Transcribe audio/video files and save the transcription as a .txt file
+def transcribe_and_save(file_path):
+    transcriber = aai.Transcriber()
+    transcript = transcriber.transcribe(file_path)
+    transcript_path = file_path + ".txt"
+    with open(transcript_path, "w") as f:
+        f.write(transcript.text)
+    return transcript_path
+
+# Check if any of the uploaded files are audio or video and transcribe them
+for doc in documents:
+    if doc.endswith(('.mp3', '.mp4', '.mpeg')):
+        transcribed_path = transcribe_and_save(doc)
+        documents.remove(doc)  # Remove the original audio/video file from the list
+        documents.append(transcribed_path)  # Add the path of the transcribed .txt file to the list
 
 # Debug statement to print uploaded files
-st.write(documents)
+# st.write(documents)
 
 if not documents:
     st.warning("No documents uploaded!")
