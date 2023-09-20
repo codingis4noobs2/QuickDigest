@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "streamlit-examples"
+version = "0.1.0"
+description = ""
+authors = ["Marcus Schiesser <mail@marcusschiesser.de>"]
+readme = "README.md"
+packages = [{ include = "streamlit_examples" }]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+llama-index = "^0.8.24.post1"
+llama-cpp-python = "^0.1.84"
+streamlit = "^1.26.0"
+pypdf = "^3.16.0"
+cohere = "^4.26"
+weaviate-client = "^3.24.1"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.9.1"
+autoflake = "^2.2.1"
+pytest = "^7.4.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
