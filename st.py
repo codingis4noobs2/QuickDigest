@@ -26,7 +26,7 @@ def transcribe_audio_video(file_path):
         f.write(transcript.text)
     return transcript_path
 
-def upload_files(types=["pdf", "txt", "mp3", "mp4", "mpeg"], **kwargs):
+def upload_files(types=["txt", "mp3", "mp4", "mpeg"], **kwargs):
     files = st.sidebar.file_uploader(
         label=f"Upload files", type=types, **kwargs
     )
@@ -36,7 +36,7 @@ def upload_files(types=["pdf", "txt", "mp3", "mp4", "mpeg"], **kwargs):
         st.stop()
     return cache_files(files, types=types)
 
-def cache_files(files, types=["pdf", "txt", "mp3", "mp4", 'mpeg']) -> list[str]:
+def cache_files(files, types=["txt", "mp3", "mp4", 'mpeg']) -> list[str]:
     filepaths = []
     for file in files:
         # Determine the file extension from the mime type
