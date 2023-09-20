@@ -1,3 +1,4 @@
 assemblyai==0.18.0
 llama_index==0.8.29
 streamlit==1.26.0
+pypdf
