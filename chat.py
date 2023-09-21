@@ -9,6 +9,7 @@ import llamaindex  # Updated import
 import st as st_utils  # Updated import to avoid naming conflict
 import assemblyai as aai
 
+st.set_page_config(page_title="QuickInsight", page_icon=":brain:")
 st.title("QuickDigest AI - Powered by OpenAI, AssemblyAI & Llama Index")
 
 openai_api_key = st_utils.get_key()
