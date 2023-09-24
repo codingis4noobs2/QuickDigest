@@ -2,12 +2,10 @@ assemblyai==0.18.0
 langchain==0.0.300
 llama_index==0.8.31
 pandas==2.1.1
-Pillow==9.5.0
 Pillow==10.0.1
 PyPDF2==3.0.1
 python_docx==0.8.11
 replicate==0.13.0
-Requests==2.31.0
 streamlit==1.27.0
 streamlit_extras==0.3.2
 deeplake==3.6.25
