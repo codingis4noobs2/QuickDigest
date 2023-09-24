@@ -22,7 +22,7 @@ def home():
         emoji="🎈",
         font_size=54,
         falling_speed=5,
-        animation_length="2",
+        animation_length="1",
     )
     
     # Displaying a colored header with specified parameters
