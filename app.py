@@ -76,7 +76,7 @@ def home():
         st.write("Buy me a coffee")
         badge(type="buymeacoffee", name="codingis4noobs2")
     with col4:
-        st.link_button("Upvote on Replit", "https://streamlit.io/gallery")
+        st.link_button("Upvote on Replit", "https://replit.com/@ParthShah38/QuickDigestAI?v=1")
 
 
 # Function to display chat with files page
