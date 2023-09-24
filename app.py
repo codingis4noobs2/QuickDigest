@@ -7,7 +7,7 @@ st.set_page_config(
     page_title="QuickDigest AI",
     page_icon=":brain:",
     layout="wide",
-    initial_sidebar_state="auto"
+    initial_sidebar_state="expanded"
 )
 
 # Defining the function to display the home page
