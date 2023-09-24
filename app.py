@@ -567,25 +567,6 @@ page_names_to_funcs = {
     "Transform your products 🎨": transform_products,
 }
 
-# css to display the footer on every page
-footer="""
-    <style>
-        .footer {
-        position:fixed;
-        left: 0;
-        bottom: 0;
-        width: 100%;
-        background-color: black;
-        color: white;
-        text-align: center;
-        }
-    </style>
-    <div class="footer">
-        <p>Developed by Parth Shah - Peerlist x ReplIt Generative AI Hackathon</p>
-    </div>
-"""
-st.markdown(footer,unsafe_allow_html=True)
-
 # display page by dictionary
 demo_name = st.sidebar.selectbox("Choose a page to navigate to", page_names_to_funcs.keys())
 page_names_to_funcs[demo_name]()
