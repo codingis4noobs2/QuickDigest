@@ -453,59 +453,66 @@ def transform_products():
     import io
     from PIL import Image
 
+    
+    st.session_state['replicate_api_token'] = st.sidebar.text_input("Replicate API Token", type='password')
+    os.environ['REPLICATE_API_TOKEN'] = st.session_state['replicate_api_token']
 
-    os.environ['REPLICATE_API_TOKEN'] = st.secrets['replicate_api_key']
+    if not st.session_state['replicate_api_token']:
+        st.sidebar.warning('Please enter your Replicate API Token to continue!!')
+        st.sidebar.info("You can get your Replicate API Token form here: [Replicate](https://replicate.com/account/api-tokens)")
+        st.stop()
+        
+    if st.session_state['replicate_api_token']:
+        st.info("This model works best with product images having transparent or plain backgrounds")
+        # Prompt user to upload an image file
+        img = st.file_uploader("Upload your product image", type=['png', 'jpg', 'jpeg'])
 
-    st.info("This model works best with product images having transparent or plain backgrounds")
-    # Prompt user to upload an image file
-    img = st.file_uploader("Upload your product image", type=['png', 'jpg', 'jpeg'])
+        if img is not None:
+            has_plain_background = st.toggle("Does your product image have a plain or transparent background? If not, let us do the hard work for you!")
+            prompt = st.text_input("Enter Prompt", help="Enter something you imagine...")
+            negative_prompt = st.text_input("Enter Negative Prompt", help="Write what you don't want in the generated images")
+            submit = st.button("Submit")
 
-    if img is not None:
-        has_plain_background = st.toggle("Does your product image have a plain or transparent background? If not, let us do the hard work for you!")
-        prompt = st.text_input("Enter Prompt", help="Enter something you imagine...")
-        negative_prompt = st.text_input("Enter Negative Prompt", help="Write what you don't want in the generated images")
-        submit = st.button("Submit")
-
-        if submit:
-            if has_plain_background:
-                # If image already has a plain background, prepare it for Replicate
-                image = Image.open(img)
-                bytes_obj = io.BytesIO()
-                image.save(bytes_obj, format='PNG')
-                bytes_obj.seek(0)
-            else:
-                # If image does not have a plain background, send it to ClipDrop to remove background
-                image_file_object = img.read()
-                r = requests.post('https://clipdrop-api.co/remove-background/v1',
-                    files={
-                        'image_file': ('uploaded_image.jpg', image_file_object, 'image/jpeg')
-                    },
-                    headers={'x-api-key': '8ec9af7a06bf56a7b29f21590152eb203d6e2badc3840581d95ab701b663119ed7d59062dcb15b1c3df198f5045e3507'}
-                )
-
-                if r.ok:
-                    # If background removal is successful, prepare image for Replicate
-                    image = Image.open(io.BytesIO(r.content))
+            if submit:
+                if has_plain_background:
+                    # If image already has a plain background, prepare it for Replicate
+                    image = Image.open(img)
                     bytes_obj = io.BytesIO()
                     image.save(bytes_obj, format='PNG')
                     bytes_obj.seek(0)
                 else:
-                    r.raise_for_status()
-                    st.error('Failed to remove background. Try again.')
-                    st.stop()
+                    # If image does not have a plain background, send it to ClipDrop to remove background
+                    image_file_object = img.read()
+                    r = requests.post('https://clipdrop-api.co/remove-background/v1',
+                        files={
+                            'image_file': ('uploaded_image.jpg', image_file_object, 'image/jpeg')
+                        },
+                        headers={'x-api-key': st.secrets['clipdrop_api_key']}
+                    )
 
-            # Send image to Replicate for transformation
-            output = replicate.run(
-                "logerzhu/ad-inpaint:b1c17d148455c1fda435ababe9ab1e03bc0d917cc3cf4251916f22c45c83c7df",
-                input={"image_path": bytes_obj, "prompt": prompt, "image_num": 4}
-            )
-            col1, col2 = st.columns(2)
-            with col1:
-                st.image(output[1])
-                st.image(output[2])
-            with col2:
-                st.image(output[3])
-                st.image(output[4])
+                    if r.ok:
+                        # If background removal is successful, prepare image for Replicate
+                        image = Image.open(io.BytesIO(r.content))
+                        bytes_obj = io.BytesIO()
+                        image.save(bytes_obj, format='PNG')
+                        bytes_obj.seek(0)
+                    else:
+                        r.raise_for_status()
+                        st.error('Failed to remove background. Try again.')
+                        st.stop()
+
+                # Send image to Replicate for transformation
+                output = replicate.run(
+                    "logerzhu/ad-inpaint:b1c17d148455c1fda435ababe9ab1e03bc0d917cc3cf4251916f22c45c83c7df",
+                    input={"image_path": bytes_obj, "prompt": prompt, "image_num": 4}
+                )
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.image(output[1])
+                    st.image(output[2])
+                with col2:
+                    st.image(output[3])
+                    st.image(output[4])
 
 # Function to generate images based on user input
 def generate_images():
@@ -514,34 +521,41 @@ def generate_images():
     import os
 
 
-    os.environ['REPLICATE_API_TOKEN'] = st.secrets['replicate_api_key']
+    st.session_state['replicate_api_token'] = st.sidebar.text_input("Replicate API Token", type='password')
+    os.environ['REPLICATE_API_TOKEN'] = st.session_state['replicate_api_token']
 
-    prompt = st.text_input(
-        "Enter prompt", 
-        help="Write something you can imagine..."
-    )
-    negative_prompt = st.text_input(
-        "Enter Negative prompt", 
-        help="Write what you don't want to see in the generated images"
-    )
-    submit = st.button("Submit")
-    
-    if submit:
-        output = replicate.run(
-            "stability-ai/sdxl:8beff3369e81422112d93b89ca01426147de542cd4684c244b673b105188fe5f",
-            input={
-                "prompt": prompt, 
-                "negative_prompt": negative_prompt, 
-                "num_outputs": 4
-            },
+    if not st.session_state['replicate_api_token']:
+        st.sidebar.warning('Please enter your Replicate API Token to continue!!')
+        st.sidebar.info("You can get your Replicate API Token form here: [Replicate](https://replicate.com/account/api-tokens)")
+        st.stop()
+
+    if st.session_state['replicate_api_token']:
+        prompt = st.text_input(
+            "Enter prompt", 
+            help="Write something you can imagine..."
         )
-        col1, col2 = st.columns(2)
-        with col1:
-            st.image(output[0])
-            st.image(output[2])
-        with col2:
-            st.image(output[1])
-            st.image(output[3])
+        negative_prompt = st.text_input(
+            "Enter Negative prompt", 
+            help="Write what you don't want to see in the generated images"
+        )
+        submit = st.button("Submit")
+
+        if submit:
+            output = replicate.run(
+                "stability-ai/sdxl:8beff3369e81422112d93b89ca01426147de542cd4684c244b673b105188fe5f",
+                input={
+                    "prompt": prompt, 
+                    "negative_prompt": negative_prompt, 
+                    "num_outputs": 4
+                },
+            )
+            col1, col2 = st.columns(2)
+            with col1:
+                st.image(output[0])
+                st.image(output[2])
+            with col2:
+                st.image(output[1])
+                st.image(output[3])
 
 # Dictonary to store all functions as pages
 page_names_to_funcs = {
