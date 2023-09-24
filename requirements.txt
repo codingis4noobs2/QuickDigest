@@ -8,3 +8,4 @@ streamlit==1.27.0
 streamlit_extras==0.3.2
 deeplake==3.6.25
 tabulate
+duckduckgo-search
