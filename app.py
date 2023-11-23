@@ -228,6 +228,7 @@ def chat_with_files():
         openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
         if not openai_api_key:
             st.sidebar.warning("Please add your OpenAI API key to continue!!")
+            st.warning("Please add your OpenAI API key to continue!!")
             st.sidebar.info("To obtain your OpenAI API key, please visit [OpenAI](https://platform.openai.com/account/api-keys). They provide a $5 credit to allow you to experiment with their models. If you're unsure about how to get the API key, you can follow this [Tutorial](https://www.maisieai.com/help/how-to-get-an-openai-api-key-for-chatgpt). While obtaining the API key doesn't require a compulsory payment, once your allotted credit is exhausted, a payment will be necessary to continue using their services.")
             st.stop()
         st.session_state["openai_api_key"] = openai_api_key
