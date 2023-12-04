@@ -2,6 +2,8 @@
 
 Discover a new horizon of data interaction with QuickDigest AI, your intelligent companion in navigating through diverse data formats. QuickDigest AI is meticulously crafted to simplify and enrich your engagement with data, ensuring a seamless flow of insights right at your fingertips.
 
+QuickDigest AI has also won the Streamlit App of the month award, check it out here: https://twitter.com/streamlit/status/1730698585929601085
+
 ## Features
 
 ### Effortless Data Extraction and Interaction:
